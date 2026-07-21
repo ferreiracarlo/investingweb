@@ -1,0 +1,29 @@
+name: Atualizar Cotacoes
+
+on:
+  schedule:
+    # Roda a cada 6 horas
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Permite rodar manualmente no painel do GitHub
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar Dependencias
+        run: pip install requests
+
+      - name: Gerar HTML
+        run: python generator.py
+
+      - name: Deploy para o GitHub Pages
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "bot: Atualiza cotações dinâmicas"
