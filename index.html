@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Finanças - Cotações & Sinais</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 2rem; }
+        h1 { text-align: center; color: #38bdf8; margin-bottom: 0.5rem; }
+        p.subtitle { text-align: center; color: #94a3b8; font-size: 0.9rem; margin-bottom: 2rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+        .card { background: #1e293b; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border-top: 4px solid #94a3b8; }
+        .card.buy { border-color: #22c55e; }
+        .card.sell { border-color: #ef4444; }
+        .card.neutral { border-color: #eab308; }
+        .price { font-size: 2rem; font-weight: bold; margin: 0.5rem 0; }
+        .var { font-size: 0.9rem; color: #cbd5e1; font-weight: normal; }
+        .media { font-size: 0.85rem; color: #94a3b8; }
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: bold; font-size: 0.85rem; margin: 1rem 0 0.5rem; background: #334155; }
+        .dica { font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
+    </style>
+</head>
+<body>
+    <h1>Painel de Cotações</h1>
+    <p class="subtitle">Análise automatizada de moedas • Atualizado em 21/07/2026 às 10:57</p>
+    <div class="grid">
+        
+        <div class="card neutral">
+            <h2>Dólar Americano</h2>
+            <div class="price">R$ 5.09 <span class="var">-0.31%</span></div>
+            <p class="media">Média 30 dias: R$ 5.15</p>
+            <div class="badge">🟡 NEUTRO</div>
+            <p class="dica">Preço dentro da média dos últimos 30 dias.</p>
+        </div>
+        
+        <div class="card neutral">
+            <h2>Euro</h2>
+            <div class="price">R$ 5.80 <span class="var">-0.29%</span></div>
+            <p class="media">Média 30 dias: R$ 5.88</p>
+            <div class="badge">🟡 NEUTRO</div>
+            <p class="dica">Preço dentro da média dos últimos 30 dias.</p>
+        </div>
+        
+        <div class="card neutral">
+            <h2>Libra Esterlina</h2>
+            <div class="price">R$ 6.80 <span class="var">-0.77%</span></div>
+            <p class="media">Média 30 dias: R$ 6.87</p>
+            <div class="badge">🟡 NEUTRO</div>
+            <p class="dica">Preço dentro da média dos últimos 30 dias.</p>
+        </div>
+        
+    </div>
+</body>
+</html>
