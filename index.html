@@ -3,52 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Finanças - Cotações & Sinais</title>
+    <title>InvestingWeb - Finanças e Cotações</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #95e9e9; color: #f8fafc; margin: 0; padding: 2rem; }
-        h1 { text-align: center; color: #f1f4f5; margin-bottom: 0.5rem; }
-        p.subtitle { text-align: center; color: #94a3b8; font-size: 0.9rem; margin-bottom: 2rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
-        .card { background: #1e293b; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border-top: 4px solid #94a3b8; }
+        :root {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --accent-blue: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+        /* Menu Horizontal */
+        header {
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-blue);
+            background: #334155;
+        }
+
+        /* Conteúdo Principal */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .title-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .title-section h1 {
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Cards e Gráficos */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+            border-top: 4px solid var(--text-muted);
+        }
         .card.buy { border-color: #22c55e; }
         .card.sell { border-color: #ef4444; }
         .card.neutral { border-color: #eab308; }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-header h2 { margin: 0; font-size: 1.25rem; }
+        .badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            background: #334155;
+        }
         .price { font-size: 2rem; font-weight: bold; margin: 0.5rem 0; }
         .var { font-size: 0.9rem; color: #cbd5e1; font-weight: normal; }
-        .media { font-size: 0.85rem; color: #94a3b8; }
-        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: bold; font-size: 0.85rem; margin: 1rem 0 0.5rem; background: #334155; }
-        .dica { font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
+        .media { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+        .dica { font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; margin: 0.5rem 0 1rem; }
+
+        /* Controles dos Gráficos */
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            background: #0f172a;
+            padding: 4px;
+            border-radius: 8px;
+        }
+        .btn-time {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-time.active {
+            background: var(--accent-blue);
+            color: #0f172a;
+        }
+        .chart-container {
+            position: relative;
+            height: 180px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-    <h1>Painel de Cotações</h1>
-    <p class="subtitle">Análise automatizada de moedas • Atualizado em 21/07/2026 às 10:57</p>
-    <div class="grid">
-        
+    <header>
+        <nav>
+            <a href="#" class="logo">InvestingWeb</a>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Mercados</a></li>
+                <li><a href="#">Notícias</a></li>
+                <li><a href="#">Aulas</a></li>
+                <li><a href="#">Análises</a></li>
+                <li><a href="#">Corretoras</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="title-section">
+            <h1>Monitor de Moedas e Cotações</h1>
+            <p class="subtitle">Análise técnica em tempo real • Atualizado em 21/07/2026 às 11:09</p>
+        </div>
+
+        <div class="grid">
+            
         <div class="card neutral">
-            <h2>Dólar Americano</h2>
-            <div class="price">R$ 5.09 <span class="var">-0.31%</span></div>
+            <div class="card-header">
+                <h2>Dólar (USD)</h2>
+                <span class="badge">🟡 NEUTRO</span>
+            </div>
+            <div class="price">R$ 5.09 <span class="var">-0.25%</span></div>
             <p class="media">Média 30 dias: R$ 5.15</p>
-            <div class="badge">🟡 NEUTRO</div>
             <p class="dica">Preço dentro da média dos últimos 30 dias.</p>
+            
+            <!-- Controles do Gráfico -->
+            <div class="chart-controls">
+                <button class="btn-time active" onclick="mudarPeriodo('USD', 'dias', this)">Dia</button>
+                <button class="btn-time" onclick="mudarPeriodo('USD', 'semanas', this)">Semana</button>
+                <button class="btn-time" onclick="mudarPeriodo('USD', 'meses', this)">Mês</button>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="chart-USD"></canvas>
+            </div>
         </div>
+        <script>
+            window.chartData = window.chartData || {};
+            window.chartData['USD'] = {"dias": {"labels": ["14/07", "15/07", "16/07", "17/07", "19/07", "20/07", "21/07"], "values": [5.09, 5.09, 5.11, 5.1, 5.12, 5.11, 5.09]}, "semanas": {"labels": ["Sem 1", "Sem 2", "Sem 3", "Sem 4"], "values": [5.17, 5.19, 5.15, 5.11]}, "meses": {"labels": ["M\u00eas -2", "M\u00eas -1", "M\u00eas Atual"], "values": [5.17, 5.18, 5.11]}};
+        </script>
         
         <div class="card neutral">
-            <h2>Euro</h2>
-            <div class="price">R$ 5.80 <span class="var">-0.29%</span></div>
+            <div class="card-header">
+                <h2>Euro (EUR)</h2>
+                <span class="badge">🟡 NEUTRO</span>
+            </div>
+            <div class="price">R$ 5.81 <span class="var">-0.23%</span></div>
             <p class="media">Média 30 dias: R$ 5.88</p>
-            <div class="badge">🟡 NEUTRO</div>
             <p class="dica">Preço dentro da média dos últimos 30 dias.</p>
+            
+            <!-- Controles do Gráfico -->
+            <div class="chart-controls">
+                <button class="btn-time active" onclick="mudarPeriodo('EUR', 'dias', this)">Dia</button>
+                <button class="btn-time" onclick="mudarPeriodo('EUR', 'semanas', this)">Semana</button>
+                <button class="btn-time" onclick="mudarPeriodo('EUR', 'meses', this)">Mês</button>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="chart-EUR"></canvas>
+            </div>
         </div>
+        <script>
+            window.chartData = window.chartData || {};
+            window.chartData['EUR'] = {"dias": {"labels": ["14/07", "15/07", "16/07", "17/07", "19/07", "20/07", "21/07"], "values": [5.8, 5.84, 5.84, 5.86, 5.85, 5.82, 5.81]}, "semanas": {"labels": ["Sem 1", "Sem 2", "Sem 3", "Sem 4"], "values": [5.9, 5.91, 5.89, 5.84]}, "meses": {"labels": ["M\u00eas -2", "M\u00eas -1", "M\u00eas Atual"], "values": [5.9, 5.91, 5.84]}};
+        </script>
         
         <div class="card neutral">
-            <h2>Libra Esterlina</h2>
-            <div class="price">R$ 6.80 <span class="var">-0.77%</span></div>
+            <div class="card-header">
+                <h2>Libra (GBP)</h2>
+                <span class="badge">🟡 NEUTRO</span>
+            </div>
+            <div class="price">R$ 6.81 <span class="var">-0.64%</span></div>
             <p class="media">Média 30 dias: R$ 6.87</p>
-            <div class="badge">🟡 NEUTRO</div>
             <p class="dica">Preço dentro da média dos últimos 30 dias.</p>
+            
+            <!-- Controles do Gráfico -->
+            <div class="chart-controls">
+                <button class="btn-time active" onclick="mudarPeriodo('GBP', 'dias', this)">Dia</button>
+                <button class="btn-time" onclick="mudarPeriodo('GBP', 'semanas', this)">Semana</button>
+                <button class="btn-time" onclick="mudarPeriodo('GBP', 'meses', this)">Mês</button>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="chart-GBP"></canvas>
+            </div>
         </div>
+        <script>
+            window.chartData = window.chartData || {};
+            window.chartData['GBP'] = {"dias": {"labels": ["15/07", "16/07", "17/07", "18/07", "19/07", "20/07", "21/07"], "values": [6.88, 6.89, 6.87, 6.86, 6.89, 6.86, 6.81]}, "semanas": {"labels": ["Sem 1", "Sem 2", "Sem 3", "Sem 4"], "values": [6.83, 6.89, 6.87, 6.87]}, "meses": {"labels": ["M\u00eas -2", "M\u00eas -1", "M\u00eas Atual"], "values": [6.84, 6.9, 6.86]}};
+        </script>
         
-    </div>
+        </div>
+    </main>
+
+    <script>
+        const charts = {};
+
+        function inicializarGraficos() {
+            const moedas = ['USD', 'EUR', 'GBP'];
+            
+            moedas.forEach(m => {
+                const ctx = document.getElementById(`chart-${m}`).getContext('2d');
+                const dataInicial = window.chartData[m]['dias'];
+                
+                charts[m] = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dataInicial.labels,
+                        datasets: [{
+                            label: 'Cotação (R$)',
+                            data: dataInicial.values,
+                            borderColor: '#38bdf8',
+                            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+                            y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+                        }
+                    }
+                });
+            });
+        }
+
+        function mudarPeriodo(moeda, periodo, elementoBtn) {
+            // Atualiza botões ativos
+            const parent = elementoBtn.parentElement;
+            parent.querySelectorAll('.btn-time').forEach(btn => btn.classList.remove('active'));
+            elementoBtn.classList.add('active');
+
+            // Atualiza o gráfico
+            const novosDados = window.chartData[moeda][periodo];
+            const chart = charts[moeda];
+            
+            chart.data.labels = novosDados.labels;
+            chart.data.datasets[0].data = novosDados.values;
+            chart.update();
+        }
+
+        document.addEventListener('DOMContentLoaded', inicializarGraficos);
+    </script>
 </body>
 </html>
