@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestingWeb - Comparativo de Corretoras</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --accent-blue: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #1e293b;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s, background 0.2s;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-blue);
+            background: var(--border-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title { color: var(--accent-blue); margin-bottom: 0.5rem; }
+        .subtitle { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.95rem; }
+
+        /* Tabela Comparativa de Corretoras */
+        .broker-table-container {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .broker-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .broker-table th {
+            background: #0f172a;
+            color: var(--accent-blue);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .broker-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .broker-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rating {
+            color: #eab308;
+            font-weight: bold;
+        }
+
+        .tag-zero {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .watermark-footer {
+            width: 100%;
+            text-align: center;
+            padding: 2.5rem 0 1.5rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(51, 65, 85, 0.4);
+        }
+
+        .watermark-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0.25;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">InvestingWeb</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Mercados</a></li>
+                <li><a href="noticias.html">Notícias</a></li>
+                <li><a href="aulas.html">Aulas</a></li>
+                <li><a href="analises.html">Análises</a></li>
+                <li><a href="corretoras.html" class="active">Corretoras</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="page-title">Guia & Comparativo de Corretoras</h1>
+        <p class="subtitle">Analise custos, taxas de câmbio e plataformas para escolher a melhor corretora.</p>
+
+        <div class="broker-table-container">
+            <table class="broker-table">
+                <thead>
+                    <tr>
+                        <th>Corretora</th>
+                        <th>Corretagem Ações</th>
+                        <th>Câmbio / Internacional</th>
+                        <th>Avaliação</th>
+                        <th>Destaque</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Corretora Alfa</strong></td>
+                        <td><span class="tag-zero">R$ 0,00</span></td>
+                        <td>Spread de 1.2%</td>
+                        <td><span class="rating">★ 4.8 / 5.0</span></td>
+                        <td>Ótimo aplicativo e relatórios de IR</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Global Invest</strong></td>
+                        <td><span class="tag-zero">R$ 0,00</span></td>
+                        <td>Spread de 0.9%</td>
+                        <td><span class="rating">★ 4.7 / 5.0</span></td>
+                        <td>Acesso direto a bolsas americanas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Trader Pro</strong></td>
+                        <td>R$ 2,50 / ordem</td>
+                        <td>Spread de 1.5%</td>
+                        <td><span class="rating">★ 4.5 / 5.0</span></td>
+                        <td>Plataformas avançadas de gráfico</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer class="watermark-footer">
+        <span class="watermark-text">InvestingWeb</span>
+    </footer>
+
+</body>
+</html>

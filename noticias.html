@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestingWeb - Notícias do Mercado</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --accent-blue: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Menu Horizontal */
+        header {
+            background: #1e293b;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s, background 0.2s;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-blue);
+            background: var(--border-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Layout em Duas Colunas */
+        .news-layout {
+            display: grid;
+            grid-template-columns: 2.5fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Card de Destaque */
+        .featured-news {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-blue);
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .news-title {
+            font-size: 1.4rem;
+            margin: 0 0 0.75rem 0;
+            color: var(--text-main);
+        }
+
+        .news-excerpt {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .news-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Lista de Notícias */
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .news-item {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .news-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-blue);
+        }
+
+        /* Sidebar Sidebar */
+        .sidebar-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .ticker-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .positive { color: #22c55e; }
+        .negative { color: #ef4444; }
+
+        /* Marca d'água */
+        .watermark-footer {
+            width: 100%;
+            text-align: center;
+            padding: 2.5rem 0 1.5rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(51, 65, 85, 0.4);
+        }
+
+        .watermark-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0.25;
+            user-select: none;
+        }
+
+        @media (max-width: 768px) {
+            .news-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">InvestingWeb</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Mercados</a></li>
+                <li><a href="noticias.html" class="active">Notícias</a></li>
+                <li><a href="aulas.html">Aulas</a></li>
+                <li><a href="analises.html">Análises</a></li>
+                <li><a href="corretoras.html">Corretoras</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="page-title">Notícias do Mercado Financeiro</h1>
+        <p class="subtitle">Acompanhe os principais acontecimentos econômicos e movimentações globais.</p>
+
+        <div class="news-layout">
+            <!-- Feed de Notícias -->
+            <div class="news-feed">
+                <!-- Destaque -->
+                <article class="featured-news">
+                    <span class="category-badge">Economia Global</span>
+                    <h2 class="news-title">Bancos Centrais ajustam projeções de inflação e impactam câmbio</h2>
+                    <p class="news-excerpt">As novas diretrizes de política monetária divulgadas esta manhã trouxeram forte volatilidade para o mercado de moedas, com variação expressiva nas cotações do Dólar e do Euro frente ao Real.</p>
+                    <div class="news-meta">Há 35 minutos • Fonte: Redação InvestingWeb</div>
+                </article>
+
+                <!-- Lista Secundária -->
+                <div class="news-list">
+                    <article class="news-item">
+                        <span class="category-badge">Câmbio</span>
+                        <h3 class="news-title" style="font-size: 1.1rem; margin: 0.2rem 0 0.5rem 0;">Libra apresenta estabilidade após divulgação do índice de empregos</h3>
+                        <p class="news-excerpt">O mercado britânico reagiu com neutralidade aos novos dados de emprego, mantendo a cotação dentro da média móvel histórica de 30 dias.</p>
+                        <div class="news-meta">Há 2 horas • Câmbio & Commodities</div>
+                    </article>
+
+                    <article class="news-item">
+                        <span class="category-badge">Renda Fixa</span>
+                        <h3 class="news-title" style="font-size: 1.1rem; margin: 0.2rem 0 0.5rem 0;">Títulos do Tesouro Direto registram alta volatilidade nas taxas</h3>
+                        <p class="news-excerpt">Investidores ajustam posições em títulos atrelados ao IPCA e à taxa Selic com foco nas decisões da reunião de política monetária.</p>
+                        <div class="news-meta">Há 4 horas • Renda Fixa</div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Lateral -->
+            <aside class="sidebar">
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">Painel Rápido</h3>
+                    <div class="ticker-item">
+                        <span>USD/BRL</span>
+                        <span class="negative">R$ 5.09 (-0.25%)</span>
+                    </div>
+                    <div class="ticker-item">
+                        <span>EUR/BRL</span>
+                        <span class="negative">R$ 5.81 (-0.23%)</span>
+                    </div>
+                    <div class="ticker-item">
+                        <span>GBP/BRL</span>
+                        <span class="negative">R$ 6.81 (-0.64%)</span>
+                    </div>
+                    <div class="ticker-item">
+                        <span>IBOVESPA</span>
+                        <span class="positive">128.450 (+0.42%)</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="watermark-footer">
+        <span class="watermark-text">InvestingWeb</span>
+    </footer>
+
+</body>
+</html>
