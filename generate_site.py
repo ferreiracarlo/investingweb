@@ -1,14 +1,15 @@
-import os
-import json
 from datetime import datetime, timezone, timedelta
+import json
+import os
 import requests
 
 # ------------------------------------------------------------------
 # 1. Configurações e Coleta de Dados (AwesomeAPI)
 # ------------------------------------------------------------------
 
-CURRENCIES = ['USD', 'EUR', 'GBP']
-MOEDA_NOMES = {'USD': 'Dólar', 'EUR': 'Euro', 'GBP': 'Libra'}
+CURRENCIES = ["USD", "EUR", "GBP"]
+MOEDA_NOMES = {"USD": "Dólar", "EUR": "Euro", "GBP": "Libra"}
+
 
 def fetch_currency_data(symbol):
     """Busca cotação atual e histórico dos últimos 30 dias na AwesomeAPI."""
@@ -16,23 +17,29 @@ def fetch_currency_data(symbol):
         # Cotação Atual
         url_last = f"https://economia.awesomeapi.com.br/json/last/{symbol}-BRL"
         resp_last = requests.get(url_last, timeout=10).json()[f"{symbol}BRL"]
-        price = float(resp_last['bid'])
-        pct_change = float(resp_last['pctChange'])
+        price = float(resp_last["bid"])
+        pct_change = float(resp_last["pctChange"])
 
         # Histórico (30 registros diários)
         url_daily = f"https://economia.awesomeapi.com.br/json/daily/{symbol}-BRL/30"
         resp_daily = requests.get(url_daily, timeout=10).json()
-        
+
         # Inverte para ordem cronológica (antigo -> novo)
-        history_prices = [float(item['bid']) for item in reversed(resp_daily)]
+        history_prices = [float(item["bid"]) for item in reversed(resp_daily)]
         history_dates = [
-            datetime.fromtimestamp(int(item['timestamp']), tz=timezone.utc).strftime('%d/%m')
+            datetime.fromtimestamp(
+                int(item["timestamp"]), tz=timezone.utc
+            ).strftime("%d/%m")
             for item in reversed(resp_daily)
         ]
 
         # Análise Técnica: Média Móvel de 30 dias e Sinais
-        avg_30 = sum(history_prices) / len(history_prices) if history_prices else price
-        
+        avg_30 = (
+            sum(history_prices) / len(history_prices)
+            if history_prices
+            else price
+        )
+
         if price < avg_30 * 0.98:
             signal_code = "buy"
             signal_label = "🟢 COMPRA"
@@ -50,23 +57,31 @@ def fetch_currency_data(symbol):
         chart_data = {
             "dias": {
                 "labels": history_dates[-7:],
-                "values": [round(v, 2) for v in history_prices[-7:]]
+                "values": [round(v, 2) for v in history_prices[-7:]],
             },
             "semanas": {
                 "labels": ["Sem 1", "Sem 2", "Sem 3", "Sem 4"],
                 "values": [
-                    round(sum(history_prices[i:i+7])/len(history_prices[i:i+7]), 2) 
+                    round(
+                        sum(history_prices[i : i + 7])
+                        / len(history_prices[i : i + 7]),
+                        2,
+                    )
                     for i in range(0, min(28, len(history_prices)), 7)
-                ]
+                ],
             },
             "meses": {
                 "labels": ["Mês -2", "Mês -1", "Mês Atual"],
                 "values": [
-                    round(sum(history_prices[:10])/10, 2),
-                    round(sum(history_prices[10:20])/10, 2),
-                    round(sum(history_prices[20:])/len(history_prices[20:]), 2)
-                ]
-            }
+                    round(sum(history_prices[:10]) / 10, 2),
+                    round(sum(history_prices[10:20]) / 10, 2),
+                    round(
+                        sum(history_prices[20:])
+                        / len(history_prices[20:]),
+                        2,
+                    ),
+                ],
+            },
         }
 
         return {
@@ -78,7 +93,7 @@ def fetch_currency_data(symbol):
             "signal_code": signal_code,
             "signal_label": signal_label,
             "dica": dica,
-            "chartData": chart_data
+            "chartData": chart_data,
         }
 
     except Exception as e:
@@ -93,8 +108,13 @@ def fetch_currency_data(symbol):
             "signal_code": "neutral",
             "signal_label": "🟡 NEUTRO",
             "dica": "Dados temporariamente indisponíveis.",
-            "chartData": {"dias": {"labels": [], "values": []}, "semanas": {"labels": [], "values": []}, "meses": {"labels": [], "values": []}}
+            "chartData": {
+                "dias": {"labels": [], "values": []},
+                "semanas": {"labels": [], "values": []},
+                "meses": {"labels": [], "values": []},
+            },
         }
+
 
 # ------------------------------------------------------------------
 # 2. Templates HTML
@@ -167,17 +187,18 @@ HTML_HEAD = """<!DOCTYPE html>
 <body>
 """
 
+
 def generate_header(active_page):
     pages = {
         "index.html": "Mercados",
         "noticias.html": "Notícias",
         "aulas.html": "Aulas",
         "analises.html": "Análises",
-        "corretoras.html": "Corretoras"
+        "corretoras.html": "Corretoras",
     }
     nav_items = ""
     for file, label in pages.items():
-        active_class = ' class="active"' if file == active_page else ''
+        active_class = ' class="active"' if file == active_page else ""
         nav_items += f'<li><a href="{file}"{active_class}>{label}</a></li>\n'
 
     return f"""
@@ -191,6 +212,7 @@ def generate_header(active_page):
     </header>
 """
 
+
 FOOTER_HTML = """
     <footer class="watermark-footer">
         <span class="watermark-text">InvestingWeb</span>
@@ -203,11 +225,12 @@ FOOTER_HTML = """
 # 3. Geradores de Cada Página
 # ------------------------------------------------------------------
 
+
 def render_index(data_list):
     # Fuso horário do Brasil (UTC-3)
     fuso_br = timezone(timedelta(hours=-3))
-    agora = datetime.now(fuso_br).strftime('%d/%m/%Y às %H:%M')
-    
+    agora = datetime.now(fuso_br).strftime("%d/%m/%Y às %H:%M")
+
     cards_html = ""
     for d in data_list:
         cards_html += f"""
@@ -336,13 +359,15 @@ def render_index(data_list):
     """
     return HTML_HEAD + generate_header("index.html") + content + FOOTER_HTML
 
+
 # ------------------------------------------------------------------
 # 4. Execução Principal
 # ------------------------------------------------------------------
 
+
 def main():
     print("Iniciando geração do site InvestingWeb...")
-    
+
     # 1. Coleta dados para o Index
     currency_data = [fetch_currency_data(symbol) for symbol in CURRENCIES]
 
@@ -352,6 +377,7 @@ def main():
     print("✓ index.html gerado com sucesso.")
 
     print("Gerador finalizado. Todos os arquivos foram atualizados!")
+
 
 if __name__ == "__main__":
     main()

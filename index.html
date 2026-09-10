@@ -241,29 +241,28 @@
         }
 
         /* Marca d'água / Rodapé */
-.watermark-footer {
-    width: 100%;
-    text-align: center;
-    padding: 2.5rem 0 1.5rem 0;
-    margin-top: 3rem;
-    border-top: 1px solid rgba(51, 65, 85, 0.4); /* Linha sutil de separação */
-}
+        .watermark-footer {
+            width: 100%;
+            text-align: center;
+            padding: 2.5rem 0 1.5rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(51, 65, 85, 0.4);
+        }
 
-.watermark-text {
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    opacity: 0.25; /* Transparência para criar o efeito de marca d'água */
-    user-select: none; /* Impede a seleção do texto ao passar o mouse */
-    transition: opacity 0.3s ease;
-}
+        .watermark-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0.25;
+            user-select: none;
+            transition: opacity 0.3s ease;
+        }
 
-/* Efeito top, sutil ao passar o mouse por cima */
-.watermark-footer:hover .watermark-text {
-    opacity: 0.5;
-}
+        .watermark-footer:hover .watermark-text {
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
@@ -337,7 +336,7 @@
                     <h2>Dólar (USD)</h2>
                     <span class="badge">🟡 NEUTRO</span>
                 </div>
-                <div class="price">R$ 5.09 <span class="var">-0.25%</span></div>
+                <div class="price" id="preco-USD">R$ 5.09 <span class="var">-0.25%</span></div>
                 <p class="media">Média 30 dias: R$ 5.15</p>
                 <p class="dica">Preço dentro da média dos últimos 30 dias.</p>
                 
@@ -362,7 +361,7 @@
                     <h2>Euro (EUR)</h2>
                     <span class="badge">🟡 NEUTRO</span>
                 </div>
-                <div class="price">R$ 5.81 <span class="var">-0.23%</span></div>
+                <div class="price" id="preco-EUR">R$ 5.81 <span class="var">-0.23%</span></div>
                 <p class="media">Média 30 dias: R$ 5.88</p>
                 <p class="dica">Preço dentro da média dos últimos 30 dias.</p>
                 
@@ -387,7 +386,7 @@
                     <h2>Libra (GBP)</h2>
                     <span class="badge">🟡 NEUTRO</span>
                 </div>
-                <div class="price">R$ 6.81 <span class="var">-0.64%</span></div>
+                <div class="price" id="preco-GBP">R$ 6.81 <span class="var">-0.64%</span></div>
                 <p class="media">Média 30 dias: R$ 6.87</p>
                 <p class="dica">Preço dentro da média dos últimos 30 dias.</p>
                 
@@ -464,11 +463,12 @@
         document.addEventListener('DOMContentLoaded', inicializarGraficos);
     </script>
 
-    <!-- Script da Calculadora -->
+    <!-- Script da Calculadora e Cotações ao Vivo -->
     <script src="calculator.js"></script>
+
     <!-- Marca d'água no rodapé -->
-<footer class="watermark-footer">
-    <span class="watermark-text">InvestingWeb</span>
-</footer>
+    <footer class="watermark-footer">
+        <span class="watermark-text">InvestingWeb</span>
+    </footer>
 </body>
 </html>
